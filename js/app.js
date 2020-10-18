@@ -7,7 +7,6 @@ let totalPaginas;
 let iterador;
 let paginaActual = 1;
 
-// Esto es lo mismo que DOMContentLoades
 window.onload = () => {
     formulario.addEventListener('submit', validarFormulario);
 }
@@ -52,21 +51,8 @@ function mostrarAlerta(mensaje){
 async function buscarImagenes() {
 
     const termino = document.querySelector('#termino').value;
-
-    // Cuando se utilizan apikey normalmente lo que se hace es utilizar variables de entorno que contengan estos datos de manera oculta y así
-    // no son visibles para cualquiera, pero en este caso práctico solo lo utilizaremos así
     const key = '18689537-5e6b4c4ec61de3684988392bd';
     const url = `https://pixabay.com/api/?key=${key}&q=${termino}&per_page=${registrosPorPagina}&page=${paginaActual}`;
-
-    // Es igual al async await que tenemos más abajo
-    // fetch(url)
-    //     .then( respuesta => respuesta.json() )
-    //     .then( resultado => {
-    //         console.log(resultado)
-    //         totalPaginas = calcularPaginas(resultado.totalHits);            
-    //         mostrarImagenes(resultado.hits)
-    //     })
-
 
     try {
         const respuesta = await fetch(url);
@@ -79,7 +65,6 @@ async function buscarImagenes() {
 
 }
 
-//Generador que va a registrar la cantidad de elementos de acuerdo a las páginas
 function *crearPaginador(total) {
     for (let i=1; i<= total; i++){
         yield i;
@@ -87,7 +72,6 @@ function *crearPaginador(total) {
 }
 
 function calcularPaginas(total){
-    // Recordemos que Math.ceil nos redondea un decimal hacia arriba
     return parseInt( Math.ceil( total / registrosPorPagina ));
 }
 
@@ -98,7 +82,6 @@ function mostrarImagenes(imagenes){
         resultado.removeChild(resultado.firstChild);
     }
 
-    // Iterar sobre el arreglo de imagenes y construir el Html
     imagenes.forEach( imagen => {
         const { previewURL, likes, views, largeImageURL } = imagen;
 
@@ -122,12 +105,10 @@ function mostrarImagenes(imagenes){
         `;
     });
 
-    // Limpiar el paginador previo
     while(paginacionDiv.firstChild){
         paginacionDiv.removeChild(paginacionDiv.firstChild);
     }
 
-    // Generamos el nuevo Html
     imprimirPaginador();
 }
 
@@ -140,7 +121,6 @@ function imprimirPaginador() {
 
         if(done) return;
 
-        // En caso contrario, genera un boton por cada elemento en el generador
         const boton = document.createElement('a');
         boton.href = '#';
         boton.dataset.pagina = value;
